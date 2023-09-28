@@ -5,17 +5,25 @@ import FormContainer from "./FormContainer";
 import { useEffect, useState } from "react";
 import Paragraph from "./QuestionTypes/Paragraph";
 import { IQuestionTemplate } from "@/core/interfaces/user.interface";
+import YesOrNo from "./QuestionTypes/YesOrNo";
 
 const AdditionalQuestion = () => {
   const [questions , setQuestions] = useState<IQuestionTemplate|null>(null)
   const [selectedType, setSelectedType] = useState(`${QuestionType.Paragraph}`);
   const [paragraph, setParagraph] = useState<string>("");
+  const [yesorno, setYesOrNo] = useState<string>("");
+  const [disqualify , setDisqualify] = useState<boolean>(false)
 
-  const deleteQuestionHalndler = () => setParagraph("");
+  const deleteQuestionHalndler = () =>{
+     setParagraph("")
+     setYesOrNo("")
+    };
 
-  const handleParagraphQuestion = (text: string) => {
-    setParagraph(text);
-  };
+  const handleParagraphQuestion = (text: string) => setParagraph(text);
+
+
+  const handleYesQuestion = (text : string)=>  setYesOrNo(text)
+  const handleDisqualifyQuestion = (checked : boolean)=>  setDisqualify(checked)
 
   const saveQuestionHandler=()=>{
     setQuestions( 
@@ -25,7 +33,7 @@ const AdditionalQuestion = () => {
       question : paragraph,
       choices:[selectedType],
       maxChoice : 0,
-      disqualify : false,
+      disqualify : disqualify,
       other:false
     }
      )
@@ -73,6 +81,12 @@ const AdditionalQuestion = () => {
           <Paragraph
             onAddParagraph={handleParagraphQuestion}
             paragraph={paragraph}
+          />
+        ) : selectedType === QuestionType.YesNo ? (
+          <YesOrNo
+          onAddYesOrNoQuestion={handleYesQuestion}
+          onDisqualify={handleDisqualifyQuestion}
+          yesorno={yesorno}
           />
         ) : null}
         <div className="w-full flex items-center justify-between">
